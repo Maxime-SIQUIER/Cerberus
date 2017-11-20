@@ -19,7 +19,7 @@ class OauthClientsController < ApplicationController
   def index
     @all_client_applications = ClientApplication.all.sort {|a,b| a.name <=> b.name }
     @client_applications = current_user.role.client_applications
-    @tokens = current_user.tokens.find :all, :conditions => 'oauth_tokens.invalidated_at is null and oauth_tokens.authorized_at is not null'
+    @tokens = current_user.tokens.all :conditions => 'oauth_tokens.invalidated_at is null and oauth_tokens.expires_at > current_date()  and oauth_tokens.authorized_at is not null'
   end
 
   # Form to declare a new application
